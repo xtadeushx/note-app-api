@@ -15,4 +15,7 @@ export class NotesService {
     this.notesList.push(note);
     return note;
   }
+  findOne(id: string): INote {
+    return this.notesList.find((note) => note.id === id);
+  }
 }

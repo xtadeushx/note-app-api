@@ -8,6 +8,7 @@ import {
   HttpCode,
   Param,
   Body,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { Request } from 'express';
@@ -30,9 +31,8 @@ export class NotesController {
   }
 
   @Get(':id')
-  findOne(@Param() params: any): string {
-    console.log(params.id);
-    return `This action returns a #${params.id} cat`;
+  async findOne(@Param('id', ParseIntPipe) id: string) {
+    return this.noteService.findOne(id);
   }
 
   @Put(':id')
