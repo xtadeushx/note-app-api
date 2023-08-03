@@ -4,35 +4,44 @@ import {
   Put,
   Delete,
   Post,
-  Req,
   HttpCode,
   Param,
   Body,
-  ParseIntPipe,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
-import { Request } from 'express';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { INote } from './interface/note.interface';
+import { ExceptionMessage } from 'src/common/enums/enums';
 
 @Controller('notes')
 export class NotesController {
   constructor(private readonly noteService: NotesService) {}
 
   @Get()
-  async findAll(): Promise<INote[]> {
-    return this.noteService.findAll();
+  async findAll() {
+    try {
+      await this.noteService.findAll();
+    } catch (error) {
+      throw new BadRequestException(ExceptionMessage.UNKNOWN_ERROR);
+    }
   }
 
   @Post()
+  @HttpCode(204)
   create(@Body() CreateNoteDto: CreateNoteDto) {
     return this.noteService.createNote(CreateNoteDto);
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: string) {
-    return this.noteService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const item = await this.noteService.findOne(id);
+    if (!item) {
+      throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
+    } else {
+      return item;
+    }
   }
 
   @Put(':id')
