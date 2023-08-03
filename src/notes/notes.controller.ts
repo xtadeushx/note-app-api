@@ -7,8 +7,13 @@ import {
   HttpCode,
   Param,
   Body,
+  Res,
   NotFoundException,
   BadRequestException,
+  ConflictException,
+  BadGatewayException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -21,17 +26,12 @@ export class NotesController {
 
   @Get()
   async findAll() {
-    try {
-      await this.noteService.findAll();
-    } catch (error) {
+    const items = await this.noteService.findAll();
+    if (items) {
+      return items;
+    } else {
       throw new BadRequestException(ExceptionMessage.UNKNOWN_ERROR);
     }
-  }
-
-  @Post()
-  @HttpCode(204)
-  create(@Body() CreateNoteDto: CreateNoteDto) {
-    return this.noteService.createNote(CreateNoteDto);
   }
 
   @Get(':id')
@@ -44,13 +44,30 @@ export class NotesController {
     }
   }
 
+  @UsePipes(new ValidationPipe()) // Use ValidationPipe here
+  @Post()
+  create(@Body() createNoteDto: CreateNoteDto) {
+    try {
+      const newNote = this.noteService.createNote(createNoteDto);
+      return newNote;
+    } catch (error) {
+      throw new BadRequestException('There is no id with such id', error);
+    }
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateNote: UpdateNoteDto) {
     return `This action updates a #${id} cat`;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} cat`;
+  remove(@Param('id') id: string, @Res() res: Response) {
+    const item = this.noteService.deleteNoteById(id);
+    console.log(item);
+    if (!item) {
+      throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
+    } else {
+      return `This action updates a #${id} cat`;
+    }
   }
 }

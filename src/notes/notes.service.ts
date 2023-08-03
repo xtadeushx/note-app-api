@@ -1,21 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { INote } from './interface/note.interface';
 import { DATA } from 'src/model/note-list';
+import { CreateNoteDto } from './dto/create-note.dto';
+import { formatDateLong } from 'src/utils/date-helper';
+import { IconsSrc } from 'src/common/enums/icons-src';
+import { NotesStatus } from 'src/common/enums/notes-status';
+
+type IconsSrcType = keyof typeof IconsSrc;
 
 @Injectable()
 export class NotesService {
-  private readonly notesList: INote[] = [...DATA];
+  private notesList: INote[] = [...DATA];
+
   findAll(): INote[] {
     return this.notesList;
   }
-  create(note: INote) {
-    this.notesList.push(note);
-  }
-  createNote(note: INote): INote {
-    this.notesList.push(note);
-    return note;
-  }
+
   findOne(id: string): INote {
     return this.notesList.find((note) => note.id === id);
+  }
+
+  createNote(note: CreateNoteDto) {
+    const newNote: INote = {
+      id: Math.random().toString(),
+      title: note.title,
+      src: IconsSrc[note.category as IconsSrcType] || IconsSrc.TASK,
+      category: note.category,
+      createdAt: formatDateLong(new Date(Date.now())),
+      content: [note.content], // Removed unnecessary spread operator
+      status: NotesStatus.ACTIVE,
+      dates: [],
+    };
+    this.notesList.push(newNote);
+    return newNote; // Return the newly created note
+  }
+
+  deleteNoteById(id: string) {
+    const note = this.notesList.find((note) => note.id == id);
+    this.notesList.filter((note) => note.id === id);
+    return note;
   }
 }

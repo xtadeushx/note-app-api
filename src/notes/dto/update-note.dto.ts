@@ -1,12 +1,15 @@
-export class UpdateNoteDto {
-  id: string;
-  src: string;
-  title: string;
-  createdAt: string;
-  category: string;
-  content: string[];
-  dates: string[];
-  status: TStatus;
-}
+import { IsString, Length, MinLength, MaxLength } from 'class-validator';
 
-export type TStatus = 'active' | 'archived';
+export class UpdateNoteDto {
+  @MinLength(5)
+  @MaxLength(20)
+  @IsString()
+  title: string;
+
+  @IsString()
+  category: string;
+
+  @IsString()
+  @Length(10, 20)
+  content: string;
+}
