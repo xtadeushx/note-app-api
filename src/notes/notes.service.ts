@@ -7,6 +7,10 @@ import { formatDateLong, formatDateShort } from 'src/utils/date-helper';
 import { IconsSrc } from 'src/common/enums/icons-src';
 import { NotesStatus } from 'src/common/enums/notes-status';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import {
+  TCategoryCounts,
+  countItemsByCategoryStatus,
+} from 'src/utils/status-counter';
 
 type IconsSrcType = keyof typeof IconsSrc;
 
@@ -22,6 +26,9 @@ export class NotesService {
     return this.notesList.find((note) => note.id === id);
   }
 
+  countStats(): any {
+    return countItemsByCategoryStatus(this.notesList);
+  }
   createNote(note: CreateNoteDto) {
     const newNote: INote = {
       id: uuidv4(),

@@ -33,6 +33,15 @@ export class NotesController {
     }
   }
 
+  @Get('/stats')
+  async returnStats() {
+    try {
+      return await this.noteService.countStats();
+    } catch (error) {
+      throw new BadRequestException(ExceptionMessage.UNKNOWN_ERROR);
+    }
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const item = await this.noteService.findOne(id);
