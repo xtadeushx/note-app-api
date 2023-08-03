@@ -66,8 +66,14 @@ export class NotesController {
     }
   }
 
+  @UsePipes(new ValidationPipe())
   @Put(':id')
   update(@Param('id') id: string, @Body() updateNote: UpdateNoteDto) {
-    return `This action updates a #${id} cat`;
+    try {
+      const newNote = this.noteService.updateNote(id, updateNote);
+      return newNote;
+    } catch (error) {
+      throw new BadRequestException('There is no id with such id', error);
+    }
   }
 }
