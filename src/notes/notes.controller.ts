@@ -4,14 +4,12 @@ import {
   Put,
   Delete,
   Post,
-  HttpCode,
   Param,
   Body,
   Res,
+  HttpStatus,
   NotFoundException,
   BadRequestException,
-  ConflictException,
-  BadGatewayException,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -19,6 +17,7 @@ import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { ExceptionMessage } from 'src/common/enums/enums';
+import { Response } from 'express';
 
 @Controller('notes')
 export class NotesController {
@@ -55,19 +54,20 @@ export class NotesController {
     }
   }
 
+  @Delete(':id')
+  remove(@Param('id') id: string, @Res() res: Response) {
+    const deletedNote = this.noteService.deleteNoteById(id);
+    if (!deletedNote) {
+      throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
+    } else {
+      res
+        .status(HttpStatus.OK)
+        .send({ message: `Note with ${id} deleted successfully` });
+    }
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateNote: UpdateNoteDto) {
     return `This action updates a #${id} cat`;
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string, @Res() res: Response) {
-    const item = this.noteService.deleteNoteById(id);
-    console.log(item);
-    if (!item) {
-      throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
-    } else {
-      return `This action updates a #${id} cat`;
-    }
   }
 }

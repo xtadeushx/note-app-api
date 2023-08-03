@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { INote } from './interface/note.interface';
 import { DATA } from 'src/model/note-list';
@@ -22,22 +23,25 @@ export class NotesService {
 
   createNote(note: CreateNoteDto) {
     const newNote: INote = {
-      id: Math.random().toString(),
+      id: uuidv4(),
       title: note.title,
       src: IconsSrc[note.category as IconsSrcType] || IconsSrc.TASK,
       category: note.category,
       createdAt: formatDateLong(new Date(Date.now())),
-      content: [note.content], // Removed unnecessary spread operator
+      content: [note.content],
       status: NotesStatus.ACTIVE,
       dates: [],
     };
     this.notesList.push(newNote);
-    return newNote; // Return the newly created note
+    return newNote;
   }
 
-  deleteNoteById(id: string) {
-    const note = this.notesList.find((note) => note.id == id);
-    this.notesList.filter((note) => note.id === id);
-    return note;
+  deleteNoteById(id: string): INote | undefined {
+    const noteIndex = this.notesList.findIndex((note) => note.id === id);
+    if (noteIndex === -1) {
+      return undefined;
+    }
+    const deletedNote = this.notesList.splice(noteIndex, 1)[0];
+    return deletedNote;
   }
 }
