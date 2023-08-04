@@ -1,7 +1,7 @@
 import {
   Controller,
   Get,
-  Put,
+  Patch,
   Delete,
   Post,
   Param,
@@ -25,10 +25,10 @@ export class NotesController {
 
   @Get()
   async findAll() {
-    const items = await this.noteService.findAll();
-    if (items) {
-      return items;
-    } else {
+    try {
+      const items = await this.noteService.findAll();
+      return items || [];
+    } catch (error) {
       throw new BadRequestException(ExceptionMessage.UNKNOWN_ERROR);
     }
   }
@@ -44,45 +44,51 @@ export class NotesController {
 
   @Get(NotesApiPath.$ID)
   async findOne(@Param('id') id: string) {
-    const item = await this.noteService.findOne(id);
-    if (!item) {
+    try {
+      const item = await this.noteService.findOne(id);
+      if (!item) {
+        throw new Error();
+      } else {
+        return item;
+      }
+    } catch (error) {
       throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
-    } else {
-      return item;
     }
   }
 
   @UsePipes(new ValidationPipe())
   @Post()
-  create(@Body() createNoteDto: CreateNoteDto) {
+  async create(@Body() createNoteDto: CreateNoteDto) {
     try {
-      const newNote = this.noteService.createNote(createNoteDto);
+      const newNote = await this.noteService.createNote(createNoteDto);
       return newNote;
     } catch (error) {
-      throw new BadRequestException(ExceptionMessage.SERVER_ERROR, error);
+      throw new BadRequestException(ExceptionMessage.SERVER_ERROR);
     }
   }
 
   @Delete(NotesApiPath.$ID)
-  remove(@Param('id') id: string, @Res() res: Response) {
-    const deletedNote = this.noteService.deleteNoteById(id);
-    if (!deletedNote) {
-      throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
-    } else {
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const deletedNote = await this.noteService.deleteNoteById(id);
+      if (!deletedNote) throw new Error();
       res
         .status(HttpStatus.OK)
         .send({ message: `Note with ${id} deleted successfully` });
+    } catch (error) {
+      throw new NotFoundException(ExceptionMessage.NOTE_NOTFOUND);
     }
   }
 
   @UsePipes(new ValidationPipe())
-  @Put(NotesApiPath.$ID)
-  update(@Param('id') id: string, @Body() updateNote: UpdateNoteDto) {
+  @Patch(NotesApiPath.$ID)
+  async update(@Param('id') id: string, @Body() updateNote: UpdateNoteDto) {
     try {
-      const newNote = this.noteService.updateNote(id, updateNote);
+      const newNote = await this.noteService.updateNote(id, updateNote);
+      if (!newNote) throw new Error();
       return newNote;
     } catch (error) {
-      throw new BadRequestException(ExceptionMessage.NOT_NOTFOUND_BY_ID, error);
+      throw new BadRequestException(ExceptionMessage.NOT_NOTFOUND_BY_ID);
     }
   }
 }
