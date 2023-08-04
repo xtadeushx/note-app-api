@@ -17,9 +17,9 @@ function countItemsByCategoryStatus(notesList: INote[]) {
       categoryCounts[category] = { category, archived: 0, active: 0 };
     }
 
-    if (status === NotesStatus.ARCHIVED) {
+    if (status === NotesStatus.ACTIVE) {
       categoryCounts[category].archived++;
-    } else if (status === NotesStatus.ACTIVE) {
+    } else if (status === NotesStatus.ARCHIVED) {
       categoryCounts[category].active++;
     }
   });
