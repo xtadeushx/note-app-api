@@ -3,14 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { INote } from './interface/note.interface';
 import { DATA } from 'src/model/note-list';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { formatDateLong, formatDateShort } from 'src/utils/date-helper';
+import { formatDate } from 'src/utils/date-helper';
 import { IconsSrc } from 'src/common/enums/icons-src';
 import { NotesStatus } from 'src/common/enums/notes-status';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import {
-  TCategoryCounts,
-  countItemsByCategoryStatus,
-} from 'src/utils/status-counter';
+import { countItemsByCategoryStatus } from 'src/utils/status-counter';
+import { LONG_OPTION, SHORT_OPTION } from 'src/common/constants/date-options';
+import { DateLocalization } from 'src/common/enums/date-local';
 
 type IconsSrcType = keyof typeof IconsSrc;
 
@@ -37,7 +36,11 @@ export class NotesService {
       src:
         IconsSrc[note.category.toUpperCase() as IconsSrcType] || IconsSrc.TASK,
       category: note.category.toLowerCase(),
-      createdAt: formatDateLong(new Date(Date.now())),
+      createdAt: formatDate(
+        new Date(Date.now()),
+        DateLocalization.EN_US,
+        LONG_OPTION,
+      ),
       content: [note.content],
       status: NotesStatus.ACTIVE,
       dates: [],
@@ -62,13 +65,21 @@ export class NotesService {
     const updatedNote: INote = {
       ...this.notesList[noteIndex],
       ...updateNote,
-      createdAt: formatDateLong(new Date(Date.now())),
+      createdAt: formatDate(
+        new Date(Date.now()),
+        DateLocalization.EN_US,
+        LONG_OPTION,
+      ),
       src:
         IconsSrc[updateNote.category.toUpperCase() as IconsSrcType] ||
         IconsSrc.TASK,
       dates: [
         ...this.notesList[noteIndex].dates,
-        formatDateShort(new Date(this.notesList[noteIndex].createdAt)),
+        formatDate(
+          new Date(this.notesList[noteIndex].createdAt),
+          DateLocalization.EN_US,
+          SHORT_OPTION,
+        ),
       ],
       content: [...this.notesList[noteIndex].content, updateNote.content],
     };
