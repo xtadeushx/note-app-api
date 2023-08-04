@@ -1,15 +1,16 @@
-import { IsString, Length, MinLength, MaxLength } from 'class-validator';
+import { IsString, MinLength, MaxLength, Contains } from 'class-validator';
+import { IsAllowedContent } from '../../decorators/is-allowed-content';
 
 export class UpdateNoteDto {
-  @MinLength(5)
+  @MinLength(0)
   @MaxLength(20)
   @IsString()
   title: string;
 
   @IsString()
+  @IsAllowedContent()
   category: string;
 
   @IsString()
-  @Length(10, 20)
   content: string;
 }

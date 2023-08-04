@@ -1,15 +1,7 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { NotesService } from './notes/notes.service';
-import { NotesController } from './notes/notes.controller';
-import { CheckBodyFieldsMiddleware } from './common/middleware/check-body-fields';
-import { NotesApiPath } from './common/enums/notes-api-path';
+import { NotesModule } from './notes/notes.module';
+import { Module } from '@nestjs/common';
 
 @Module({
-  controllers: [NotesController],
-  providers: [NotesService],
+  imports: [NotesModule],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CheckBodyFieldsMiddleware).forRoutes(NotesApiPath.NOTES);
-  }
-}
+export class AppModule {}

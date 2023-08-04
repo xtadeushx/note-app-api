@@ -11,3 +11,5 @@ export interface INote {
 }
 
 export type TStatus = 'active' | 'archived';
+
+type TCategory = 'task' | 'random thoughts' | 'idea' | 'quote';

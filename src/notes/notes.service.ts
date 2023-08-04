@@ -29,12 +29,14 @@ export class NotesService {
   countStats(): any {
     return countItemsByCategoryStatus(this.notesList);
   }
+
   createNote(note: CreateNoteDto) {
     const newNote: INote = {
       id: uuidv4(),
       title: note.title,
-      src: IconsSrc[note.category as IconsSrcType] || IconsSrc.TASK,
-      category: note.category,
+      src:
+        IconsSrc[note.category.toUpperCase() as IconsSrcType] || IconsSrc.TASK,
+      category: note.category.toLowerCase(),
       createdAt: formatDateLong(new Date(Date.now())),
       content: [note.content],
       status: NotesStatus.ACTIVE,
@@ -61,12 +63,14 @@ export class NotesService {
       ...this.notesList[noteIndex],
       ...updateNote,
       createdAt: formatDateLong(new Date(Date.now())),
-      src: IconsSrc[updateNote.category as IconsSrcType] || IconsSrc.TASK,
+      src:
+        IconsSrc[updateNote.category.toUpperCase() as IconsSrcType] ||
+        IconsSrc.TASK,
       dates: [
         ...this.notesList[noteIndex].dates,
         formatDateShort(new Date(this.notesList[noteIndex].createdAt)),
       ],
-      content: [...this.notesList[noteIndex].content],
+      content: [...this.notesList[noteIndex].content, updateNote.content],
     };
 
     this.notesList[noteIndex] = updatedNote;

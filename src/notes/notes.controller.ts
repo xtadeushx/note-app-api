@@ -52,7 +52,7 @@ export class NotesController {
     }
   }
 
-  @UsePipes(new ValidationPipe()) // Use ValidationPipe here
+  @UsePipes(new ValidationPipe())
   @Post()
   create(@Body() createNoteDto: CreateNoteDto) {
     try {
