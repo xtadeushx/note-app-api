@@ -37,7 +37,7 @@ $ npm run start:prod
 
 ## Running the swagger
 
-go [](http://localhost:3000/api)
+go [http://localhost:3000/api](http://localhost:3000/api)
 
 ## Endpoints:
 
