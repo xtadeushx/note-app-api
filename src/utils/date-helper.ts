@@ -1,4 +1,4 @@
-import { MONTHS } from 'src/constants/months';
+import { MONTHS } from 'src/common/constants/months';
 
 const formatDateLong = (date: Date): string => {
   const year = date.getFullYear();

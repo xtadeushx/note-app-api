@@ -16,10 +16,10 @@ import {
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { ExceptionMessage } from 'src/common/enums/enums';
+import { ExceptionMessage, NotesApiPath } from 'src/common/enums/enums';
 import { Response } from 'express';
 
-@Controller('notes')
+@Controller(NotesApiPath.NOTES)
 export class NotesController {
   constructor(private readonly noteService: NotesService) {}
 
@@ -33,7 +33,7 @@ export class NotesController {
     }
   }
 
-  @Get('/stats')
+  @Get(NotesApiPath.NOTES)
   async returnStats() {
     try {
       return await this.noteService.countStats();
@@ -42,7 +42,7 @@ export class NotesController {
     }
   }
 
-  @Get(':id')
+  @Get(NotesApiPath.$ID)
   async findOne(@Param('id') id: string) {
     const item = await this.noteService.findOne(id);
     if (!item) {
@@ -59,11 +59,11 @@ export class NotesController {
       const newNote = this.noteService.createNote(createNoteDto);
       return newNote;
     } catch (error) {
-      throw new BadRequestException('There is no id with such id', error);
+      throw new BadRequestException(ExceptionMessage.SERVER_ERROR, error);
     }
   }
 
-  @Delete(':id')
+  @Delete(NotesApiPath.$ID)
   remove(@Param('id') id: string, @Res() res: Response) {
     const deletedNote = this.noteService.deleteNoteById(id);
     if (!deletedNote) {
@@ -76,13 +76,13 @@ export class NotesController {
   }
 
   @UsePipes(new ValidationPipe())
-  @Put(':id')
+  @Put(NotesApiPath.$ID)
   update(@Param('id') id: string, @Body() updateNote: UpdateNoteDto) {
     try {
       const newNote = this.noteService.updateNote(id, updateNote);
       return newNote;
     } catch (error) {
-      throw new BadRequestException('There is no id with such id', error);
+      throw new BadRequestException(ExceptionMessage.NOT_NOTFOUND_BY_ID, error);
     }
   }
 }
