@@ -3,6 +3,7 @@ enum ExceptionMessage {
   NOTE_NOTFOUND = 'Note is not found.',
   NOT_NOTFOUND_BY_ID = 'There is no Note with such id',
   SERVER_ERROR = 'Note was not created',
+  INVALID_FIELDS = 'Invalid fields in the request body',
 }
 
 export { ExceptionMessage };
