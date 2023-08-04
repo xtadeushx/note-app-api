@@ -33,7 +33,7 @@ export class NotesController {
     }
   }
 
-  @Get(NotesApiPath.NOTES)
+  @Get(NotesApiPath.STATS)
   async returnStats() {
     try {
       return await this.noteService.countStats();
