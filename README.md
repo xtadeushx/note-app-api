@@ -10,10 +10,10 @@ It is a implementation of the Task3 in RADENCY internship
 
 ### STACK :
 
-_[Nest](https://github.com/nestjs/nest) Nestjs;
-_[class-validator](https://www.npmjs.com/package/class-validator) class-validator for validating;
-*[uuid](https://www.npmjs.com/package/uuid) uuid for random id generation;
-*SWAGGER
+- [Nest](https://github.com/nestjs/nest) Nestjs;
+- [class-validator](https://www.npmjs.com/package/class-validator) class-validator for validating;
+- [uuid](https://www.npmjs.com/package/uuid) uuid for random id generation;
+- SWAGGER
 
 ## Installation
 
@@ -39,9 +39,9 @@ go [](http://localhost:3000/api)
 
 ## Endpoints:
 
-_1._ POST /notes - Create a note object./
-_2._ DELETE /notes/:id - Remove item.
-_3._ PATCH /notes/:id - Edit item.
-_4._ GET /notes/:id - Retrieve item..
-_5._ GET /notes - Get all notes..
-_6._ GET /notes/stats - Get aggregated data statistics. You don’t have to mock this data. You need to calculate it based on notes objects you have..
+- POST /notes - Create a note object./
+- DELETE /notes/:id - Remove item.
+- PATCH /notes/:id - Edit item.
+- GET /notes/:id - Retrieve item..
+- GET /notes - Get all notes..
+- GET /notes/stats - Get aggregated data statistics. You don’t have to mock this data. You need to calculate it based on notes objects you have..
