@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres'
+    container_name: ogl
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: notes_postgres
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:alpine3.14
+    container_name: redis-oogl
+    ports:
+      - 6379:6379
