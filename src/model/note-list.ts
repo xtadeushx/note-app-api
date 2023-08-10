@@ -1,4 +1,4 @@
-import { INote } from 'src/notes/interface/note.interface';
+import { INote } from 'src/modules/notes/interface/note.interface';
 
 const DATA: INote[] = [
   {
