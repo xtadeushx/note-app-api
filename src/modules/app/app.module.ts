@@ -2,12 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configurations from '../../configurations';
 import { NotesController } from '../notes/notes.controller';
-import { NotesService } from '../notes/notes.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from '../users/users.module';
 import { NotesModule } from '../notes/notes.module';
 import { UsersController } from '../users/users.controller';
-import { UsersService } from '../users/users.service';
 import { User } from '../users/models/user.model';
 
 @Module({
