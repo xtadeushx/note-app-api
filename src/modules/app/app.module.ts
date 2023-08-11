@@ -6,6 +6,9 @@ import { NotesService } from '../notes/notes.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from '../users/users.module';
 import { NotesModule } from '../notes/notes.module';
+import { UsersController } from '../users/users.controller';
+import { UsersService } from '../users/users.service';
+import { User } from '../users/models/user.model';
 
 @Module({
   imports: [
@@ -13,8 +16,6 @@ import { NotesModule } from '../notes/notes.module';
       isGlobal: true,
       load: [configurations],
     }),
-    UsersModule,
-    NotesModule,
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -27,11 +28,12 @@ import { NotesModule } from '../notes/notes.module';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [],
+        models: [User],
       }),
     }),
+    NotesModule,
+    UsersModule,
   ],
-  controllers: [NotesController],
-  providers: [NotesService],
+  controllers: [NotesController, UsersController],
 })
 export class AppModule {}
