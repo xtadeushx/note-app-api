@@ -10,7 +10,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post(AuthApiPath.REGISTER)
-  async register(@Body() dto: CreateUserDto): Promise<AuthUserResponse> {
+  async register(@Body() dto: CreateUserDto): Promise<CreateUserDto> {
     return await this.authService.registerUsers(dto);
   }
 

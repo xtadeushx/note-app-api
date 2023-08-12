@@ -9,6 +9,7 @@ import { UsersController } from '../users/users.controller';
 import { User } from '../users/models/user.model';
 import { AuthController } from '../auth/auth.controller';
 import { AuthModule } from '../auth/auth.module';
+import { TokenModule } from '../token/token.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AuthModule } from '../auth/auth.module';
     NotesModule,
     UsersModule,
     AuthModule,
+    TokenModule,
   ],
   controllers: [NotesController, UsersController, AuthController],
 })
