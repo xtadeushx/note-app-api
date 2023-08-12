@@ -1,6 +1,6 @@
 const PasswordApiPath = {
   SET: '/set',
-  RESET: '/reset'
+  RESET: '/reset',
 };
 
 export { PasswordApiPath };

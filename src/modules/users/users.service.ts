@@ -21,22 +21,14 @@ export class UsersService {
   }
 
   async createUser(dto: CreateUserDto): Promise<CreateUserDto> {
-    try {
-      const existUser = await this.findUserByEmail(dto.email);
-      if (existUser)
-        throw new BadRequestException(ExceptionMessage.EMAIL_ALREADY_EXISTS);
-
-      dto.password = await this.hashPassword(dto.password);
-      const newUser = {
-        firstName: dto.firstName,
-        userName: dto.userName,
-        email: dto.email,
-        password: dto.password,
-      };
-      await this.userRepository.create(newUser);
-      return dto;
-    } catch (error) {
-      return error;
-    }
+    dto.password = await this.hashPassword(dto.password);
+    const newUser = {
+      firstName: dto.firstName,
+      userName: dto.userName,
+      email: dto.email,
+      password: dto.password,
+    };
+    await this.userRepository.create(newUser);
+    return dto;
   }
 }

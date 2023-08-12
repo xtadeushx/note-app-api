@@ -7,6 +7,8 @@ import { UsersModule } from '../users/users.module';
 import { NotesModule } from '../notes/notes.module';
 import { UsersController } from '../users/users.controller';
 import { User } from '../users/models/user.model';
+import { AuthController } from '../auth/auth.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -31,7 +33,8 @@ import { User } from '../users/models/user.model';
     }),
     NotesModule,
     UsersModule,
+    AuthModule,
   ],
-  controllers: [NotesController, UsersController],
+  controllers: [NotesController, UsersController, AuthController],
 })
 export class AppModule {}
