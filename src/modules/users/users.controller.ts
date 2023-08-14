@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { ApiPath, UsersApiPath } from 'src/common/enums/enums';
 
 @Controller(ApiPath.USERS)

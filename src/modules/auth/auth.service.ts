@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { ExceptionMessage } from 'src/common/enums/enums';
-import { CreateUserDto } from '../users/dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { AuthUserResponse } from './response';
@@ -15,14 +15,16 @@ export class AuthService {
   ) {}
 
   async registerUsers(dto: CreateUserDto): Promise<CreateUserDto> {
-    const existUser = await this.userService.findUserByEmail(dto.email);
+    const { email } = dto;
+    const existUser = await this.userService.findUserByEmail(email);
     if (existUser)
       throw new BadRequestException(ExceptionMessage.EMAIL_ALREADY_EXISTS);
     return this.userService.createUser(dto);
   }
 
   async loginUser(dto: LoginUserDto): Promise<AuthUserResponse> {
-    const existUser = await this.userService.findUserByEmail(dto.email);
+    const { email } = dto;
+    const existUser = await this.userService.findUserByEmail(email);
     if (!existUser)
       throw new BadRequestException(ExceptionMessage.USERNAME_NOT_REGISTER);
     const validPassword = await bcrypt.compare(
@@ -31,7 +33,8 @@ export class AuthService {
     );
     if (!validPassword)
       throw new BadRequestException(ExceptionMessage.PASSWORDS_NOT_MATCH);
-    const token = await this.tokenService.generateJwtToken(dto.email);
-    return { ...existUser, token };
+    const token = await this.tokenService.generateJwtToken(email);
+    const user = await this.userService.publicUser(email);
+    return { ...user, token };
   }
 }
