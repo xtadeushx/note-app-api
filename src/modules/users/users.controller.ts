@@ -34,9 +34,8 @@ export class UsersController {
   @ApiTags('API')
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async deleteUser(@Req() request) {
+  async deleteUser(@Req() request): Promise<string> {
     const { email } = request.user;
-    console.log(email);
     return this.usersService.deleteUser(email);
   }
 }

@@ -47,7 +47,7 @@ export class UsersService {
     return dto;
   }
 
-  async deleteUser(email: string) {
+  async deleteUser(email: string): Promise<string> {
     await this.userRepository.destroy({ where: { email: email } });
     return `user with email  ${email} was deleted`;
   }
