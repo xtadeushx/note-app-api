@@ -4,18 +4,16 @@ import {
   Put,
   Delete,
   Post,
-  Req,
-  HttpCode,
   Param,
   Body,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
-import { Request } from 'express';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { INote } from './interface/note.interface';
+import { ApiPath } from 'src/common/enums/enums';
 
-@Controller('notes')
+@Controller(ApiPath.NOTES)
 export class NotesController {
   constructor(private readonly noteService: NotesService) {}
 
@@ -31,7 +29,6 @@ export class NotesController {
 
   @Get(':id')
   findOne(@Param() params: any): string {
-    console.log(params.id);
     return `This action returns a #${params.id} cat`;
   }
 
