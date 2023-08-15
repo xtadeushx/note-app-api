@@ -4,6 +4,7 @@ import { User } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PublicUserDto } from './dto/public-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -39,5 +40,15 @@ export class UsersService {
         exclude: ['password'],
       },
     });
+  }
+
+  async updateUser(email: string, dto: UpdateUserDto): Promise<UpdateUserDto> {
+    await this.userRepository.update(dto, { where: { email: email } });
+    return dto;
+  }
+
+  async deleteUser(email: string): Promise<string> {
+    await this.userRepository.destroy({ where: { email: email } });
+    return `user with email  ${email} was deleted`;
   }
 }

@@ -33,7 +33,9 @@ export class AuthService {
     );
     if (!validPassword)
       throw new BadRequestException(ExceptionMessage.PASSWORDS_NOT_MATCH);
-    const token = await this.tokenService.generateJwtToken(email);
+
+    const userData = { name: existUser.firstName, email: existUser.email };
+    const token = await this.tokenService.generateJwtToken(userData);
     const user = await this.userService.publicUser(email);
     return { ...user, token };
   }

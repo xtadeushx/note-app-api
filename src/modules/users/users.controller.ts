@@ -1,14 +1,41 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { ApiPath, UsersApiPath } from 'src/common/enums/enums';
+import { ApiPath, HttpCode } from 'src/common/enums/enums';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller(ApiPath.USERS)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post(UsersApiPath.CREATE_USERS)
-  async createUsers(@Body() dto: CreateUserDto) {
-    return await this.usersService.createUser(dto);
+  @ApiTags('API')
+  @ApiResponse({
+    status: HttpCode.OK,
+    type: UpdateUserDto,
+  })
+  @UseGuards(JwtAuthGuard)
+  @Patch()
+  updateUser(
+    @Body() updateDto: UpdateUserDto,
+    @Req() request,
+  ): Promise<UpdateUserDto> {
+    const { email } = request.user;
+    return this.usersService.updateUser(email, updateDto);
+  }
+
+  @ApiTags('API')
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async deleteUser(@Req() request): Promise<string> {
+    const { email } = request.user;
+    return this.usersService.deleteUser(email);
   }
 }
