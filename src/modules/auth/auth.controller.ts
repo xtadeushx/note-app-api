@@ -28,13 +28,7 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({ status: HttpCode.UNAUTHORIZED })
   @Post(AuthApiPath.LOGIN)
-  async login(@Body() dto: LoginUserDto): Promise<AuthUserResponse> {
+  async login(@Body() dto: LoginUserDto): Promise<any> {
     return await this.authService.loginUser(dto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('test')
-  test() {
-    return true;
   }
 }

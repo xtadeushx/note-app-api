@@ -11,8 +11,10 @@ import {
 } from '@nestjs/common';
 import { WatchlistService } from './watchlist.service';
 import { WatchListDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/guards/jwt-guard';
+import { CreateAssetResponseDto } from './response';
+import { HttpCode } from 'src/common/enums/enums';
 
 @Controller('watchlist')
 export class WatchlistController {
@@ -21,32 +23,29 @@ export class WatchlistController {
   @ApiTags('API')
   @UseGuards(JwtAuthGuard)
   @Post('create')
-  createAsset(@Body() dto: WatchListDto, @Req() request) {
+  @ApiResponse({
+    status: HttpCode.CREATED,
+    type: CreateAssetResponseDto,
+  })
+  createAsset(
+    @Body() dto: WatchListDto,
+    @Req() request,
+  ): Promise<CreateAssetResponseDto> {
     const user = request.user;
     return this.watchlistService.createAssets(user, dto);
   }
 
   @ApiTags('API')
   @UseGuards(JwtAuthGuard)
-  @Get('get-all')
-  getAllAsset(@Query('id') id): Promise<WatchListDto[]> {
-    return this.watchlistService.getAllAssets(id);
-  }
-
-  @ApiTags('API')
-  @UseGuards(JwtAuthGuard)
-  @Patch('update')
-  updateAssets(
-    @Body() dto: WatchListDto,
-    @Query('id') id,
-  ): Promise<WatchListDto> {
-    return this.watchlistService.updateAssets(dto, id);
-  }
-
-  @ApiTags('API')
-  @UseGuards(JwtAuthGuard)
   @Delete()
-  async deleteAsset(@Query('id') id): Promise<string> {
-    return this.watchlistService.deleteAssets(id);
+  @ApiResponse({
+    status: HttpCode.OK,
+  })
+  async deleteAsset(
+    @Req() request,
+    @Query('id') assetId: string,
+  ): Promise<string> {
+    const { id } = request.user;
+    return this.watchlistService.deleteAssets(assetId, id);
   }
 }
