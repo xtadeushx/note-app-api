@@ -22,7 +22,7 @@ export class AuthService {
     return this.userService.createUser(dto);
   }
 
-  async loginUser(dto: LoginUserDto): Promise<AuthUserResponse> {
+  async loginUser(dto: LoginUserDto): Promise<any> {
     const { email } = dto;
     const existUser = await this.userService.findUserByEmail(email);
     if (!existUser)
@@ -33,10 +33,9 @@ export class AuthService {
     );
     if (!validPassword)
       throw new BadRequestException(ExceptionMessage.PASSWORDS_NOT_MATCH);
-
-    const userData = { name: existUser.firstName, email: existUser.email };
-    const token = await this.tokenService.generateJwtToken(userData);
     const user = await this.userService.publicUser(email);
-    return { ...user, token };
+
+    const token = await this.tokenService.generateJwtToken(user);
+    return { user, token };
   }
 }

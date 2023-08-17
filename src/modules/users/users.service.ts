@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PublicUserDto } from './dto/public-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Watchlist } from '../watchlist/models/watchlist.model';
 
 @Injectable()
 export class UsersService {
@@ -38,6 +39,10 @@ export class UsersService {
       where: { email: email },
       attributes: {
         exclude: ['password'],
+      },
+      include: {
+        model: Watchlist,
+        required: false,
       },
     });
   }

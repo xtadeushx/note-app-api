@@ -10,6 +10,8 @@ import { User } from '../users/models/user.model';
 import { AuthController } from '../auth/auth.controller';
 import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from '../token/token.module';
+import { WatchlistModule } from '../watchlist/watchlist.module';
+import { Watchlist } from '../watchlist/models/watchlist.model';
 
 @Module({
   imports: [
@@ -29,13 +31,14 @@ import { TokenModule } from '../token/token.module';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [User],
+        models: [User, Watchlist],
       }),
     }),
     NotesModule,
     UsersModule,
     AuthModule,
     TokenModule,
+    WatchlistModule,
   ],
   controllers: [NotesController, UsersController, AuthController],
 })
