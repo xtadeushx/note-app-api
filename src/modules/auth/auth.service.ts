@@ -22,7 +22,7 @@ export class AuthService {
     return this.userService.createUser(dto);
   }
 
-  async loginUser(dto: LoginUserDto): Promise<any> {
+  async loginUser(dto: LoginUserDto): Promise<AuthUserResponse> {
     const { email } = dto;
     const existUser = await this.userService.findUserByEmail(email);
     if (!existUser)
