@@ -5,7 +5,6 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './dto';
 import { AuthUserResponse } from './response';
 import { ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/guards/jwt-guard';
 
 @Controller(ApiPath.AUTH)
 export class AuthController {
@@ -28,7 +27,7 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({ status: HttpCode.UNAUTHORIZED })
   @Post(AuthApiPath.LOGIN)
-  async login(@Body() dto: LoginUserDto): Promise<any> {
+  async login(@Body() dto: LoginUserDto): Promise<AuthUserResponse> {
     return await this.authService.loginUser(dto);
   }
 }
